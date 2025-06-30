@@ -20,7 +20,7 @@ API_URLS = [
     "https://hr-corp-system-drf-backend.vercel.app/admin/login/",
     "https://hr-corp-system-drf-backend.vercel.app/employee/list/",
 
-    "https://job-portal-system-backend.vercel.app/",
+    # "https://job-portal-system-backend.vercel.app/",
     "https://job-portal-system-backend.vercel.app/job_posts/all/",
     "https://job-portal-system-backend.vercel.app/employer/list/",
 ]
