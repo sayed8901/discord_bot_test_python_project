@@ -17,12 +17,14 @@ CHANNEL_ID = int(os.getenv("DISCORD_CHANNEL_ID"))
 
 # APIs list to hit
 API_URLS = [
-    "https://hr-corp-system-drf-backend.vercel.app/admin/login/",
-    "https://hr-corp-system-drf-backend.vercel.app/employee/list/",
-
+    # for testing purpose only
     # "https://job-portal-system-backend.vercel.app/",
-    "https://job-portal-system-backend.vercel.app/job_posts/all/",
-    "https://job-portal-system-backend.vercel.app/employer/list/",
+    # "https://job-portal-system-backend.vercel.app/job_posts/all/",
+    # "https://hr-corp-system-drf-backend.vercel.app/employee/list/",
+
+    # alumni connect apis
+    "https://alumniconnect.xyz/api/v1/associations/",
+    "https://staging.alumniconnect.xyz/api/v1/associations/",
 ]
 
 
