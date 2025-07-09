@@ -1,0 +1,6 @@
+{
+    "urls": [
+        "https://alumniconnect.xyz/api/v1/associations/",
+        "https://staging.alumniconnect.xyz/api/v1/associations/"
+    ]
+}
