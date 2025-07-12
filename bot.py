@@ -101,7 +101,7 @@ async def daily_report():
     while True:
         now = datetime.now()
 
-        if now.hour == 22 and now.minute == 00:   # at 10:00 PM every night
+        if now.hour == 20 and now.minute == 00:   # at 8:00 PM every night
             await channel.send("📊 **Daily API Summary Report**")
 
             if daily_summary_logs:
