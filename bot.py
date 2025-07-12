@@ -44,7 +44,7 @@ API_URLS = load_api_urls()
 
 
 
-# Discord Intents
+# Discord Intents Setup
 intents = discord.Intents.default()
 intents.messages = True
 intents.message_content = True  
@@ -53,8 +53,9 @@ client = discord.Client(intents=intents)
 
 
 
-daily_summary = []
-
+# Logs
+daily_summary_logs = []
+ping_count = 0
 
 
 
@@ -64,22 +65,26 @@ async def check_apis():
     await client.wait_until_ready()
     channel = client.get_channel(CHANNEL_ID)
 
+    global ping_count               # to count the number of pings
+
 
     while True:
         async with aiohttp.ClientSession() as session:
             for url in API_URLS:
+                ping_count += 1     # increase the number of pings
+
                 try:
                     async with session.get(url) as response:
                         if response.status != 200:
                             msg = f"❗ Error: `{url}` returned status {response.status}"
                             await channel.send(msg)
-                            daily_summary.append(f"{datetime.now()}: {msg}")
+                            daily_summary_logs.append(f"{datetime.now()}: {msg}")
                 except Exception as e:
                     msg = f"🚫 Server Down: `{url}` - {e}"
                     await channel.send(msg)
-                    daily_summary.append(f"{datetime.now()}: {msg}")
+                    daily_summary_logs.append(f"{datetime.now()}: {msg}")
 
-        await asyncio.sleep(300)  # will run in every 5 minutes interval
+        await asyncio.sleep(600)  # will run in every 10 minutes interval
 
 
 
@@ -90,18 +95,31 @@ async def daily_report():
     await client.wait_until_ready()
     channel = client.get_channel(CHANNEL_ID)
 
+    global ping_count               # to count the number of pings
+
 
     while True:
         now = datetime.now()
 
-        if now.hour == 23 and now.minute == 59:
-            if daily_summary:
-                await channel.send("📊 **Daily API Summary Report**")
+        if now.hour == 22 and now.minute == 00:   # at 10:00 PM every night
+            await channel.send("📊 **Daily API Summary Report**")
 
-                for entry in daily_summary[-10:]:
+            if daily_summary_logs:
+                await channel.send("🚨 Errors detected today:")
+
+                for entry in daily_summary_logs[-10:]:
                     await channel.send(entry)
 
-                daily_summary.clear()
+            else:
+                await channel.send("✅ No errors detected. All APIs were up and running smoothly.")
+
+            await channel.send(f"🔄 Total API checks performed today: `{ping_count}`")
+
+
+            # Clear logs and reset counter
+            daily_summary_logs.clear()
+            ping_count = 0
+
 
         await asyncio.sleep(60)  # It will check only once for one minute
 
@@ -158,7 +176,7 @@ async def on_message(message):
 
 
 
-
+# ------------------- BOT READY EVENT -------------------
 @client.event
 async def on_ready():
     print(f"✅ Bot logged in as {client.user}")
@@ -180,5 +198,3 @@ async def main():
 
 # to run the bot
 asyncio.run(main())
-
-# ------------------- END BOT -------------------
